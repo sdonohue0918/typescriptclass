@@ -1,0 +1,23 @@
+{
+  "name": "typescript-class",
+  "version": "1.0.0",
+  "description": "code-along",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "lite-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sdonohue0918/typescriptclass.git"
+  },
+  "author": "sdonohue0918",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sdonohue0918/typescriptclass/issues"
+  },
+  "homepage": "https://github.com/sdonohue0918/typescriptclass#readme",
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}
