@@ -75,7 +75,7 @@ console.log(seanTyped.role)
 // test1: [string, number] TUPLE --> use to specify what data types, where in the array, and the amount of elements
 
 //Union type
-function combine(input1: number | string, input2: string | number){
+function add(input1: number | string, input2: string | number){
     let result;
     if (typeof input1 === 'number' && typeof input2 === 'number') {
         result = input1 + input2
@@ -86,6 +86,98 @@ function combine(input1: number | string, input2: string | number){
     return result
 }
 
-const returned = combine(30, 'Anna')
+const returned = add(30, 'Anna')
 
-console.log(returned)
+//console.log(returned)
+
+//Literal type
+
+function combine1(input1: number | string, input2: string | number, resultConver: 'asString' | 'asNumber'){
+    let result;
+    if (typeof input1 === 'number' && typeof input2 === 'number' || resultConver === 'asNumber') {
+        result = +input1 +  +input2
+    } else {
+        result = input1.toString() + input2.toString()
+    }
+
+    if (resultConver === 'asNumber') {
+         return +result
+    } else {
+        return result.toString()
+    }
+}
+    
+
+// const whatever = combine1('30', '50', 'asNumber')
+// console.log(whatever)
+
+//Type Aliases
+
+type Combinable = number | string
+type Conversion = 'asString' | 'asNumber'
+//you use type (from ts) to give a name for custom type 
+
+function combine2(input1: Combinable, input2: Combinable, resultConver: Conversion){
+    let result;
+    if (typeof input1 === 'number' && typeof input2 === 'number' || resultConver === 'asNumber') {
+        result = +input1 +  +input2
+    } else {
+        result = input1.toString() + input2.toString()
+    }
+
+    if (resultConver === 'asNumber') {
+         return +result
+    } else {
+        return result.toString()
+    }
+}
+    
+//Return Type
+
+//assigned to the function to check for correct return value data type on compilation
+function add2(inp1: number, inp2: number): number {
+    return inp1 + inp2
+}
+// let test = add2(2,5)
+// console.log(test)
+
+
+
+
+//Return Type/Void Type
+//a function with a void return type doesn't return any value, in other programming languages, undefined is what happens in vanilla js 
+//also will compile if you do return something, making void flexible in cases where you may or may not want to return a value depending on the control flow
+function printResult(num: number): void {
+    console.log('Result: ' + num)
+
+
+}
+//printResult(add(3,4))
+
+
+//Functions as Types
+//() => creates a function type
+let combineValues: (a: number, b: number) => number;
+//this syntax/semant basically infers that combineValues can accept an assigned function  with params that are nums and that will return a number value, a function that is assigned that doesn't meet these specs will cause a compilation error 
+combineValues = add2
+//console.log(combineValues(3, 6))
+
+
+
+//Unknown Type
+
+
+
+
+
+//function types and callbacks
+
+function addAndHandle(num1: number, num2: number, callback: (cbNum: number) => void) {
+    const result = num1 + num2;
+    callback(result)
+}
+
+addAndHandle(5,10, (result) => {
+    console.log(result)
+})
+

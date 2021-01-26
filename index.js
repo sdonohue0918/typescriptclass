@@ -51,7 +51,7 @@ console.log(seanTyped.role);
 // test: any[] means you can have any data type in the array
 // test1: [string, number] TUPLE --> use to specify what data types, where in the array, and the amount of elements
 //Union type
-function combine(input1, input2) {
+function add(input1, input2) {
     var result;
     if (typeof input1 === 'number' && typeof input2 === 'number') {
         result = input1 + input2;
@@ -61,5 +61,64 @@ function combine(input1, input2) {
     }
     return result;
 }
-var returned = combine(30, 'Anna');
-console.log(returned);
+var returned = add(30, 'Anna');
+//console.log(returned)
+//Literal type
+function combine1(input1, input2, resultConver) {
+    var result;
+    if (typeof input1 === 'number' && typeof input2 === 'number' || resultConver === 'asNumber') {
+        result = +input1 + +input2;
+    }
+    else {
+        result = input1.toString() + input2.toString();
+    }
+    if (resultConver === 'asNumber') {
+        return +result;
+    }
+    else {
+        return result.toString();
+    }
+}
+//you use type (from ts) to give a name for custom type 
+function combine2(input1, input2, resultConver) {
+    var result;
+    if (typeof input1 === 'number' && typeof input2 === 'number' || resultConver === 'asNumber') {
+        result = +input1 + +input2;
+    }
+    else {
+        result = input1.toString() + input2.toString();
+    }
+    if (resultConver === 'asNumber') {
+        return +result;
+    }
+    else {
+        return result.toString();
+    }
+}
+//Return Type
+//assigned to the function to check for correct return value data type on compilation
+function add2(inp1, inp2) {
+    return inp1 + inp2;
+}
+// let test = add2(2,5)
+// console.log(test)
+//Return Type/Void Type
+//a function with a void return type doesn't return any value, in other programming languages, undefined is what happens in vanilla js 
+function printResult(num) {
+    console.log('Result: ' + num);
+}
+//printResult(add(3,4))
+//Functions as Types
+//() => creates a function type
+var combineValues;
+//this syntax/semant basically infers that combineValues can accept an assigned function  with params that are nums and that will return a number value, a function that is assigned that doesn't meet these specs will cause a compilation error 
+combineValues = add2;
+//console.log(combineValues(3, 6))
+//function types and callbacks
+function addAndHandle(num1, num2, callback) {
+    var result = num1 + num2;
+    callback(result);
+}
+addAndHandle(5, 10, function (result) {
+    console.log(result);
+});
