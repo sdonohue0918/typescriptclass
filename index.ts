@@ -1,147 +1,74 @@
-class Department {
-    private name: string;
-    protected employees: string[] = []
-    //protected modifier allows the variable to be available in classes where it is extended 
+interface Person {
+    name: string;
+    age: number;
 
-    //these lines that look like k/v pairs are just fields for the class, can also set a default value to a field
-    //a 'private' flag  in front of a field name means that the value is only available for operations within the class instance
-    //you cannot do researchdevelopment.employees[...add]; you would need a method to do this
-    private code: string;
+    greet(phrase: string): void
+}
+//interfaces describe the structure of an object
+//cannot assign values to any properties
+//cannot write implementations for methods
 
-    constructor(n: string, id: string) {
+//interfaces are used to check an object (not a class) has the correct structure
+
+//interfaces and custom types are similar but different in...
+    //interfaces can only describe objects, type is more flexible
+    //interfaces is better with objects than custom typing
+    //interfaces can be implemented by a class/classes in a way similar to abstract classes 
+
+
+let user1: Person;
+
+user1 = {
+    name: 'Sean',
+    age: 26,
+    greet(phrase: string){
+        console.log('whatsup' + phrase)
+    }
+}
+
+
+interface  Greetable {
+    //readonly name: string;
+    //implements readonly--->prop can be set once but cannot be changed after
+    
+    greet(phrase: string): void;
+}
+
+interface Named extends Greetable {
+    readonly name: string;
+}
+//interfaces can extend other interfaces which makes deciding which interfaces have what properties easier
+
+
+class Human implements Named {
+    //name?: string
+    //'?' in an interface or class marks it as an optional property, for classes ? will be used in constructor to be used most effectively
+    name: string
+    age: number
+
+    constructor(n: string, age: number ){
         this.name = n
-        this.code = id
+        this.age = age
         
     }
-    //constructor method creates an instance of the class
 
-    // constructor(private readonly n: string, public id: string ) {
-
-    // }
-
-    //can also be initialized like the above with access modifiers 
-    //readonly can only be added in constructor and prevents that value from being modified by any class methods
-
-    describe(this: Department) {
-        console.log('Department' + this.name)
+    greet(phrase: string){
+        console.log('whatsup' + phrase)
     }
-    //using the this parameter in ts is interpreted in ts as describing that this will be referring to an instance of the 'Department' Class which adds a layer of data security to the code
+    // class can have properties or methods that are more than what is specified in the interface but anything the interface specifies must be in the class
+}
+//console.log(user1.greet(' bro'))
 
-    addEmployees(employee: string) {
-        this.employees.push(employee)
-    }
-
-    printInfo() {
-        console.log(this.employees.length)
-        console.log(this.employees)
-    }
-    //abstract describe(this: Department): void 
-    //if derived classes inherit this method the class has to be flagged as an abstract class
+//Interfaces as Function Type
+interface AddFn {
+    (a: number, b: number): number;
+    //function acts as anonymous function within interface
 }
 
-const researchdevelopment = new Department('R&D', 'JhTTyajk')
-//console.log(researchdevelopment)
+let sum: AddFn;
 
-//researchdevelopment.addEmployees('Sean')
-//researchdevelopment.printInfo()
-
-class ITDept extends Department {
-    
-    
-    
-    constructor(public admins: string[], private reports: string[]){
-        super('IT','XjjiTcJ')
-        this.admins = admins
-        this.reports = reports
-    }
-
-    //super must be added to the constructor of any class that extends a parent class, super calls the constructor of the base class 
-    //super must be called before using 'this' to declare specific properties
-
-    addEmployees(name: string){
-        if (name !== 'doosh') {
-            this.employees.push(name)
-        } else {
-            return 
-        }
-    }
-    //this class method overrides the base class method with its own functionality, allowable and we can access employees data by using a protected access modifier flag on employees list in the base class
-    
-    
-    addReport(report: string) {
-        this.reports.push(report)
-    }
-
-    get lastReport() {
-        if (this.reports.length === 0) {
-            return
-        } else {
-            return this.reports[this.reports.length - 1]
-        }
-    }
-
-    set removeReport(reportNo: number) {
-        if (this.reports[reportNo]) {
-            
-            this.reports.splice(reportNo, 1)
-        } else {
-            return
-        }
-       
-    }
-
-    static createNotice(memo: string){
-        return memo
-    }
-    //cannot use a static property on an instance 
-
-    //describe(){
-        //implementation of abstract class 
-        //x----> console.log(this.name)
-    //}
-
+sum = (n1: number, n2: number) => {
+    return n1 + n2
 }
 
-
-//Singleton Pattern --> ensuring that you can only have one instance of a class
-//"strictPropertyInitialization": false
-class AccountingDept extends Department{
-
-    private static instance: AccountingDept
-    
-    
-    private constructor() {
-        super('Accounting', 'HjjtyR')
-    }
-
-    static getInstance() {
-        if (AccountingDept.instance){
-            return this.instance
-        } else {
-            this.instance = new AccountingDept()
-            return this.instance
-        }
-    }
-}
-
-
-const IT = new ITDept(['doosh', 'bag', 'leroy'], [])
-IT.addEmployees('Dingus')
-IT.addEmployees('bach')
-IT.addReport('shitters clogged')
-IT.addReport('HR blows')
-IT.addReport('Hr sucks')
-//IT.removeReport = 2
-//setters take the parameter like the above; cant use method(param) syntax
-//console.log(IT.lastReport)
-//getters are called by classInst.methodName without ()
-const message = ITDept.createNotice('we need to dev')
-//console.log(message)
-//console.log(IT)
-const accountingDept = AccountingDept.getInstance()
-const accountingAudits = AccountingDept.getInstance()
-//console.log(accountingDept, accountingAudits)
-
-//ON ABSTRACT CLASSES
-// use abstract classes when you want derived classes to inherit methods that will have unique implementations 
-//Abstract classes need to be extended by derived class, you cannot make instances of them
+//console.log(sum(1,2))
