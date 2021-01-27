@@ -1,108 +1,58 @@
-//Intersection Types
-//allow you to combine different types
-var _a;
-//the actual intersection type
-var e1 = {
-    name: 'Sean',
-    privileges: ['level 3', 'analyst'],
-    startDate: new Date()
+//Generics--->connected with another type and adds flexibility for defining incoming data
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
 };
-//Type Guards
-function add3(a, b) {
-    if (typeof a === 'string' || typeof b === 'string') {
-        return a.toString() + b.toString();
+//const names = ['sean', 'patrick']
+var names = []; //array needs a specifier for the kind of data that the array will contain
+function countAndPrint(element) {
+    var desc = 'Received no value!';
+    if (element.length === 1) {
+        desc = 'got ' + element.length + '1 element';
     }
-    else {
-        return a + b;
+    else if (element.length > 1) {
+        desc = 'got ' + element.length + ' elements';
     }
-    //the above conditional is a type guard; it takes advantage of the flexibility of union types
+    return [element, desc];
 }
-function printInfo(emp) {
-    console.log('Name: ' + emp.name);
-    if ('privileges' in emp) {
-        console.log('Privileges: ' + emp.privileges);
-    }
-    if ('startDate' in emp) {
-        console.log('start date: ' + emp.startDate);
-    }
+//console.log(countAndPrint('Wassssssup'))
+//if you pass in array ts assigns a length property to it and will count the number of elements, vs passing in a string which counts number of characters when length is assigned
+//keyof constraint
+function extractAndConvert(obj, key) {
+    return 'Value ' + obj[key];
 }
-//printInfo(e1)
-var Car = /** @class */ (function () {
-    function Car() {
+//console.log(extractAndConvert({name: 'max'}, 'name'))
+//Generic Classes
+//Generic class can be used if you don't care about what data is being stored in the class,  
+var Store = /** @class */ (function () {
+    function Store() {
+        this.data = [];
     }
-    Car.prototype.drive = function () {
-        console.log('Driving...');
+    Store.prototype.addItem = function (item) {
+        this.data.push(item);
     };
-    return Car;
+    Store.prototype.removeItem = function (item) {
+        this.data.splice(this.data.indexOf(item), 1);
+    };
+    Store.prototype.getItems = function () {
+        return __spreadArrays(this.data);
+    };
+    return Store;
 }());
-var Truck = /** @class */ (function () {
-    function Truck() {
-    }
-    Truck.prototype.drive = function () {
-        console.log('Driving...');
-    };
-    Truck.prototype.cargoLoad = function (amount) {
-        console.log('Loading cargo...' + amount);
-    };
-    return Truck;
-}());
-var v1 = new Car();
-var v2 = new Truck();
-function useVehicle(vehicle) {
-    vehicle.drive();
-    if ('cargoLoad' in vehicle) {
-        vehicle.cargoLoad(34);
-    }
-    //can also use if(vehicle instanceof Truck){} if you are working with classes ONLY
+var textStorage = new Store();
+var numStorage = new Store();
+function createCourse(title, description, completeUntil) {
+    var courseGoal = {};
+    courseGoal.title = title;
+    courseGoal.description = description;
+    courseGoal.completeUntil = completeUntil;
+    //Partial turns courseGoal into an object type where the properties are optional
+    return courseGoal;
 }
-//there is one common property in each object which makes up the union, the property can be used in the below function to type check; this is useful for working with objects, union types, and interfaces
-function moveAnimal(animal) {
-    var speed;
-    switch (animal.type) {
-        case 'bird':
-            speed = animal.flyingSpeed;
-            break;
-        case 'horse':
-            speed = animal.groundSpeed;
-    }
-    console.log('Moving with speed: ' + speed);
-}
-//moveAnimal({type: 'horse', groundSpeed:25})
-//Type Casting
-//Type casting can allow typescript to recognize what type of specific HTML element is being worked with instead of it just recognizing a generic HTML element
-var paragraph = document.getElementById('message-output');
-//const ui = document.getElementById('user-input')
-var input = document.getElementById('user-input');
-//can also do it like
-var secondInput = document.getElementById('second-input');
-//! means that your telling typescript the expression in front of it  will not be null
-input.value = 'Wasssssssup';
-var curErrorMessages = {
-    email: 'not a valid email address',
-    username: 'username already taken'
-};
-function add4(a, b) {
-    if (typeof a === 'string' || typeof b === 'string') {
-        return a.toString() + b.toString();
-    }
-    else {
-        return a + b;
-    }
-}
-//OPtional Chaining --->
-var fetchedData = {
-    id: 'u1',
-    name: 'sean',
-    job: {
-        title: 'programmer',
-        description: 'front-end engineer'
-    }
-};
-//can add '?' after an object before dot notation
-console.log((_a = fetchedData === null || fetchedData === void 0 ? void 0 : fetchedData.job) === null || _a === void 0 ? void 0 : _a.description);
-//what this is doing is allowing compiler to run without producing a runtime error, useful for accessing nested properties; if something is undefined (thing in front of ?) it will not access it and will not throw a runtime error
-//Nullish Coalescing--> use if you dont know data is null or undefined only
-var userInp = null;
-//const storedData = userInp || 'Default value if userInp is not present in fetched data'
-//ts way of nullish colaescing
-var storedData = userInp !== null && userInp !== void 0 ? userInp : 'DEFAULT';
+var nameArr = ['Max', 'Anna'];
+//ts compile knows that nameArr cannot be modified after init
+//Note on Generics and Unions
+//For data collections unions are more flexible in allowing different data types whereas generics allow you to lock into a data type for a use case
